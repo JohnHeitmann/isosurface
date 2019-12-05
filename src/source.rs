@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use math::Vec3;
+use crate::math::Vec3;
 
 /// A source capable of sampling a signed distance field at discrete coordinates.
 pub trait Source {

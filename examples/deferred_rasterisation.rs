@@ -28,8 +28,8 @@ use glium::glutin::{Api, ControlFlow, ElementState, Event, GlProfile, GlRequest,
 use cgmath::{Matrix4, Point3, SquareMatrix, vec3};
 use isosurface::point_cloud::PointCloud;
 use isosurface::source::CentralDifference;
-use common::sources::Torus;
-use common::reinterpret_cast_slice;
+use crate::common::sources::Torus;
+use crate::common::reinterpret_cast_slice;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

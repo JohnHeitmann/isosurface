@@ -31,9 +31,9 @@ use cgmath::{Matrix4, Point3, vec3};
 use isosurface::marching_cubes::MarchingCubes;
 use isosurface::linear_hashed_marching_cubes::LinearHashedMarchingCubes;
 use isosurface::source::CentralDifference;
-use common::sources::{CubeSphere, Torus};
-use common::reinterpret_cast_slice;
-use common::text::layout_text;
+use crate::common::sources::{CubeSphere, Torus};
+use crate::common::reinterpret_cast_slice;
+use crate::common::text::layout_text;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -168,8 +168,8 @@ fn main() {
         vec3(0.0, 1.0, 0.0),
     );
 
-    let help_transform = layout_text(50.0, aspect, 1.0, 1.0);
-    let label_transform = layout_text(50.0, aspect, 1.0, 50.0 / aspect - 2.0);
+    let _help_transform = layout_text(50.0, aspect, 1.0, 1.0);
+    let _label_transform = layout_text(50.0, aspect, 1.0, 50.0 / aspect - 2.0);
 
     events_loop.run_forever(|event| {
         match event {

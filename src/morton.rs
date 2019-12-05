@@ -13,7 +13,7 @@
 // limitations under the License.
 
 use std;
-use math::Vec3;
+use crate::math::Vec3;
 
 const THREE_2: usize = 9;
 const THREE_1: usize = 3;
