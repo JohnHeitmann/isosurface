@@ -56,7 +56,7 @@ fn main() {
     let mut events_loop = glutin::EventsLoop::new();
     let window = glutin::WindowBuilder::new()
         .with_title("deferred rasterisation")
-        .with_dimensions(1024, 768);
+        .with_dimensions((1024, 768).into());
     let context = glutin::ContextBuilder::new()
         .with_vsync(true)
         .with_gl_profile(GlProfile::Core)
@@ -65,8 +65,7 @@ fn main() {
     let display =
         glium::Display::new(window, context, &events_loop).expect("failed to create display");
 
-    let (width, height) = display.gl_window().get_inner_size_pixels().unwrap();
-
+    let (width, height) = display.gl_window().window().get_inner_size().unwrap().into();
     let subdivisions = 64;
 
     let torus = Torus {};
@@ -297,7 +296,7 @@ fn main() {
         events_loop.run_forever(|event| {
             match event {
                 Event::WindowEvent { event, .. } => match event {
-                    WindowEvent::Closed => return ControlFlow::Break,
+                    WindowEvent::CloseRequested => return ControlFlow::Break,
                     WindowEvent::KeyboardInput {
                         input:
                             KeyboardInput {

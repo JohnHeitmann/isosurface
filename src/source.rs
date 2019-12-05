@@ -33,13 +33,13 @@ pub trait HermiteSource: Source {
 
 /// Adapts a `Source` to a `HermiteSource` by deriving normals from the surface via central differencing
 pub struct CentralDifference {
-    source: Box<Source>,
+    source: Box<dyn Source>,
     epsilon: f32,
 }
 
 impl CentralDifference {
     /// Create an adaptor from a [Source](trait.Source.html)
-    pub fn new(source: Box<Source>) -> CentralDifference {
+    pub fn new(source: Box<dyn Source>) -> CentralDifference {
         CentralDifference {
             source,
             epsilon: 0.0001,
@@ -47,7 +47,7 @@ impl CentralDifference {
     }
 
     /// Create an adaptor from a [Source](trait.Source.html) and an epsilon value
-    pub fn new_with_epsilon(source: Box<Source>, epsilon: f32) -> CentralDifference {
+    pub fn new_with_epsilon(source: Box<dyn Source>, epsilon: f32) -> CentralDifference {
         CentralDifference { source, epsilon }
     }
 }
