@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extern crate cgmath;
+use cgmath;
 #[macro_use]
 extern crate glium;
-extern crate isosurface;
+
 
 mod common;
 

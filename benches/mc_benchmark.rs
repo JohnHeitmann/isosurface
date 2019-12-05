@@ -1,5 +1,5 @@
-extern crate criterion;
-extern crate isosurface;
+
+
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use isosurface::marching_cubes::MarchingCubes;

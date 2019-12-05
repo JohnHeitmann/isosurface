@@ -171,7 +171,7 @@ impl std::convert::From<Morton> for usize {
 }
 
 impl std::fmt::Debug for Morton {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "0x{:X}", self.0)
     }
 }
