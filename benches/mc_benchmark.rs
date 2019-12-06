@@ -1,9 +1,8 @@
-
-
-
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use isosurface::marching_cubes::MarchingCubes;
-use isosurface::source::Source;
+use isosurface::linear_hashed_marching_cubes::LinearHashedMarchingCubes;
+use isosurface::source::{CentralDifference, Source};
+
 pub struct Sphere {}
 
 impl Source for Sphere {
@@ -34,8 +33,7 @@ impl Source for ExpensiveSource {
     }
 }
 
-
-fn bench_sphere(n: usize) -> usize {
+fn bench_mc_sphere(n: usize) -> usize {
     let mut vertices = vec![];
     let mut indices = vec![];
     let mut marching_cubes = MarchingCubes::new(n);
@@ -43,7 +41,35 @@ fn bench_sphere(n: usize) -> usize {
     marching_cubes.extract(&source, &mut vertices, &mut indices);
     vertices.len()
 }
-fn bench_expensive_sdf(n: usize) -> usize {
+
+fn bench_mc_sphere_normals(n: usize) -> usize {
+    let mut vertices = vec![];
+    let mut indices = vec![];
+    let mut marching_cubes = MarchingCubes::new(n);
+    let source = CentralDifference::new(Box::new(Sphere {}));
+    marching_cubes.extract_with_normals(&source, &mut vertices, &mut indices);
+    vertices.len()
+}
+
+fn bench_lmc_sphere(n: usize) -> usize {
+    let mut vertices = vec![];
+    let mut indices = vec![];
+    let mut marching_cubes = LinearHashedMarchingCubes::new(n);
+    let source = Sphere {};
+    marching_cubes.extract(&source, &mut vertices, &mut indices);
+    vertices.len()
+}
+
+fn bench_lmc_sphere_normals(n: usize) -> usize {
+    let mut vertices = vec![];
+    let mut indices = vec![];
+    let mut marching_cubes = LinearHashedMarchingCubes::new(n);
+    let source = CentralDifference::new(Box::new(Sphere {}));
+    marching_cubes.extract_with_normals(&source, &mut vertices, &mut indices);
+    vertices.len()
+}
+
+fn bench_mc_expensive_sdf(n: usize) -> usize {
     let mut vertices = vec![];
     let mut indices = vec![];
     let mut marching_cubes = MarchingCubes::new(n);
@@ -52,13 +78,30 @@ fn bench_expensive_sdf(n: usize) -> usize {
     vertices.len()
 }
 
+fn bench_lmc_expensive_sdf(n: usize) -> usize {
+    let mut vertices = vec![];
+    let mut indices = vec![];
+    let mut marching_cubes = LinearHashedMarchingCubes::new(n);
+    let source = ExpensiveSource {};
+    marching_cubes.extract(&source, &mut vertices, &mut indices);
+    vertices.len()
+}
+
+
 
 fn criterion_benchmark(c: &mut Criterion) {
-    c.bench_function("sphere 20", |b| b.iter(|| bench_sphere(black_box(20))));
-    c.bench_function("sphere 30", |b| b.iter(|| bench_sphere(black_box(30))));
-    c.bench_function("sphere 40", |b| b.iter(|| bench_sphere(black_box(40))));
-    c.bench_function("expensive 20", |b| b.iter(|| bench_expensive_sdf(black_box(20))));    
-    c.bench_function("expensive 30", |b| b.iter(|| bench_expensive_sdf(black_box(30))));    
+    c.bench_function("mc sphere 16", |b| b.iter(|| bench_mc_sphere(black_box(16))));
+    c.bench_function("mc sphere 32", |b| b.iter(|| bench_mc_sphere(black_box(32))));
+    c.bench_function("mc expensive 16", |b| b.iter(|| bench_mc_expensive_sdf(black_box(16))));    
+    c.bench_function("mc expensive 32", |b| b.iter(|| bench_mc_expensive_sdf(black_box(32))));    
+
+    c.bench_function("mc sphere normals 16", |b| b.iter(|| bench_mc_sphere_normals(black_box(16))));
+    c.bench_function("mc expensive normals 16", |b| b.iter(|| bench_lmc_sphere_normals(black_box(16))));
+
+    c.bench_function("lmc sphere 4", |b| b.iter(|| bench_lmc_sphere(black_box(4))));
+    c.bench_function("lmc sphere 5", |b| b.iter(|| bench_lmc_sphere(black_box(5))));
+    c.bench_function("lmc expensive 4", |b| b.iter(|| bench_lmc_expensive_sdf(black_box(4))));    
+    c.bench_function("lmc expensive 5", |b| b.iter(|| bench_lmc_expensive_sdf(black_box(5))));
 }
 
 criterion_group!(benches, criterion_benchmark);
